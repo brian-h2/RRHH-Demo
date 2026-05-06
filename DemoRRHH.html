@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ConsultoraHR Demo — Construimos vínculos que transforman</title>
+<meta name="description" content="Consultora boutique de RRHH: selección, evaluación, outplacement y capacitación. Acompañamos encuentros genuinos entre personas y organizaciones." />
+<style>
+  /* ---------- Reset & base ---------- */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f6f3ee;        /* beige perla */
+    --bg-muted: #f1efeb;
+    --text: #2b2a28;            /* gris carbón */
+    --text-soft: #5b5954;
+    --line: #e7e2d8;
+    --accent: #a8553f;          /* terracota suave */
+    --accent-dark: #8a4332;
+    --accent-soft: #d8b8ad;
+    --serif: "Cormorant Garamond", "Playfair Display", Georgia, "Times New Roman", serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --radius: 4px;
+    --maxw: 1180px;
+  }
+  body {
+    font-family: var(--sans);
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.65;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { font-family: var(--serif); font-weight: 500; line-height: 1.15; color: var(--text); letter-spacing: -0.01em; }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  .container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Header ---------- */
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: saturate(140%) blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 0;
+  }
+  .logo {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    letter-spacing: 0.02em;
+  }
+  .logo span { color: var(--accent); }
+  .nav-menu { display: none; gap: 32px; list-style: none; }
+  .nav-menu a {
+    font-size: 0.92rem; color: var(--text-soft);
+    transition: color .2s ease;
+    position: relative;
+  }
+  .nav-menu a:hover { color: var(--accent); }
+  .nav-toggle {
+    display: inline-flex; flex-direction: column; gap: 4px;
+    background: none; border: 0; cursor: pointer; padding: 8px;
+  }
+  .nav-toggle span { width: 22px; height: 1.5px; background: var(--text); display:block; }
+  @media (min-width: 860px) {
+    .nav-menu { display: flex; }
+    .nav-toggle { display: none; }
+  }
+  .nav-mobile {
+    display: none; flex-direction: column; gap: 4px;
+    padding: 8px 0 20px; border-top: 1px solid var(--line);
+  }
+  .nav-mobile.open { display: flex; }
+  .nav-mobile a { padding: 10px 0; color: var(--text-soft); font-size: 0.95rem; }
+  @media (min-width: 860px) { .nav-mobile { display: none !important; } }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 26px; border-radius: var(--radius);
+    font-size: 0.95rem; font-weight: 500; cursor: pointer;
+    border: 1px solid transparent;
+    transition: all .25s ease;
+    font-family: var(--sans);
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent-dark); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; color: var(--text); border-color: var(--text); }
+  .btn-secondary:hover { background: var(--text); color: #fff; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 90px 0 110px;
+    text-align: center;
+    background:
+      radial-gradient(ellipse at top, rgba(168,85,63,0.06), transparent 60%),
+      var(--bg);
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 6vw, 4.6rem);
+    max-width: 900px; margin: 0 auto 28px;
+  }
+  .hero p.lead {
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    color: var(--text-soft);
+    max-width: 680px; margin: 0 auto 40px;
+  }
+  .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    margin-top: 56px;
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-soft);
+  }
+  .badge::before, .badge::after {
+    content: ""; width: 28px; height: 1px; background: var(--accent-soft);
+  }
+
+  /* ---------- Sections ---------- */
+  section { padding: 100px 0; }
+  .section-soft { background: var(--bg-soft); }
+  .eyebrow {
+    font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 18px; font-weight: 600;
+  }
+  .section-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    max-width: 720px; margin-bottom: 24px;
+  }
+  .section-intro { color: var(--text-soft); max-width: 640px; font-size: 1.05rem; }
+
+  /* ---------- Propósito ---------- */
+  .purpose-grid {
+    margin-top: 60px;
+    display: grid; gap: 40px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 820px) { .purpose-grid { grid-template-columns: 1fr 1fr; gap: 64px; } }
+  .purpose-card {
+    background: #fff;
+    padding: 48px 40px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .purpose-card h3 {
+    font-size: 1.8rem; margin-bottom: 18px;
+    color: var(--accent);
+  }
+  .purpose-card p { color: var(--text-soft); }
+
+  /* ---------- Valores ---------- */
+  .values-grid {
+    margin-top: 60px;
+    display: grid; gap: 32px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) { .values-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 980px) { .values-grid { grid-template-columns: repeat(4, 1fr); } }
+  .value {
+    padding: 28px 4px; border-top: 1px solid var(--line);
+  }
+  .value h4 { font-size: 1.3rem; margin-bottom: 10px; }
+  .value p { color: var(--text-soft); font-size: 0.95rem; }
+
+  /* ---------- Servicios ---------- */
+  .services-list { margin-top: 70px; }
+  .service-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 28px;
+    padding: 40px 0;
+    border-top: 1px solid var(--line);
+    align-items: start;
+  }
+  .service-item:last-child { border-bottom: 1px solid var(--line); }
+  @media (min-width: 820px) {
+    .service-item { grid-template-columns: 140px 1fr 1fr; gap: 48px; padding: 56px 0; }
+  }
+  .service-num {
+    font-family: var(--serif);
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    color: var(--accent);
+    line-height: 1;
+  }
+  .service-title h3 {
+    font-size: clamp(1.6rem, 2.4vw, 2rem);
+    margin-bottom: 8px;
+  }
+  .service-title p { color: var(--text-soft); }
+  .service-features { list-style: none; }
+  .service-features li {
+    color: var(--text-soft);
+    padding: 8px 0 8px 22px;
+    position: relative;
+    font-size: 0.97rem;
+  }
+  .service-features li::before {
+    content: ""; position: absolute; left: 0; top: 18px;
+    width: 10px; height: 1px; background: var(--accent);
+  }
+
+  /* ---------- Oportunidades / Suscripción ---------- */
+  .subscribe {
+    background: var(--accent);
+    color: #fff;
+    text-align: center;
+  }
+  .subscribe .eyebrow { color: var(--accent-soft); }
+  .subscribe h2 { color: #fff; max-width: 720px; margin: 0 auto 20px; }
+  .subscribe p {
+    color: rgba(255,255,255,0.85);
+    max-width: 580px; margin: 0 auto 40px;
+  }
+  .subscribe-form {
+    display: flex; flex-direction: column; gap: 12px;
+    max-width: 520px; margin: 0 auto;
+  }
+  @media (min-width: 600px) { .subscribe-form { flex-direction: row; } }
+  .subscribe-form input {
+    flex: 1;
+    padding: 16px 20px;
+    border: 1px solid rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-family: var(--sans);
+    outline: none;
+    transition: all .2s ease;
+  }
+  .subscribe-form input::placeholder { color: rgba(255,255,255,0.7); }
+  .subscribe-form input:focus { background: rgba(255,255,255,0.18); border-color: #fff; }
+  .subscribe-form button {
+    background: #fff; color: var(--accent);
+    border: 0; padding: 16px 28px;
+    border-radius: var(--radius);
+    font-size: 0.95rem; font-weight: 600;
+    cursor: pointer; transition: all .25s ease;
+    font-family: var(--sans);
+  }
+  .subscribe-form button:hover { background: var(--text); color: #fff; }
+  .subscribe-note { margin-top: 20px; font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+
+  /* ---------- Footer ---------- */
+  footer {
+    background: var(--text);
+    color: #cfcdc7;
+    padding: 70px 0 40px;
+    text-align: center;
+  }
+  footer .closing {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+    color: #fff;
+    max-width: 600px; margin: 0 auto 40px;
+  }
+  footer .copy {
+    font-size: 0.85rem; color: #8a8884;
+    border-top: 1px solid #3a3936;
+    padding-top: 30px; margin-top: 30px;
+  }
+
+  /* ---------- Animations ---------- */
+  @media (prefers-reduced-motion: no-preference) {
+    .fade-up { opacity: 0; transform: translateY(16px); transition: opacity .8s ease, transform .8s ease; }
+    .fade-up.in { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+    <a href="#inicio" class="logo">Consultora<span>RRHH</span></a>
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#proposito">Propósito</a></li>
+        <li><a href="#que-hacemos">¿Qué hacemos?</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#oportunidades">Oportunidades</a></li>
+      </ul>
+    </nav>
+    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('mob').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="container">
+    <div id="mob" class="nav-mobile">
+      <a href="#inicio">Inicio</a>
+      <a href="#proposito">Propósito</a>
+      <a href="#que-hacemos">¿Qué hacemos?</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#oportunidades">Oportunidades</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="container">
+      <h1 class="fade-up">Construimos vínculos que transforman.</h1>
+      <p class="lead fade-up">Acompañamos encuentros genuinos entre personas y organizaciones, donde el trabajo se vive como un espacio de crecimiento y futuro.</p>
+      <div class="hero-cta fade-up">
+        <a href="#servicios" class="btn btn-primary">Nuestros Servicios ↗</a>
+        <a href="#oportunidades" class="btn btn-secondary">Hablemos hoy</a>
+      </div>
+      <div class="badge fade-up">Experiencia · +20 años liderando procesos</div>
+    </div>
+  </section>
+
+  <!-- PROPÓSITO -->
+  <section id="proposito" class="section-soft">
+    <div class="container">
+      <p class="eyebrow fade-up">Nuestro propósito</p>
+      <h2 class="section-title fade-up">Misión y visión que guían cada vínculo.</h2>
+      <p class="section-intro fade-up">Creemos en la selección humana: procesos cuidados, mirada estratégica y respeto profundo por las personas que transforman organizaciones.</p>
+
+      <div class="purpose-grid">
+        <div class="purpose-card fade-up">
+          <h3>Misión</h3>
+          <p>Acompañar a personas y organizaciones en procesos de selección, evaluación y desarrollo, generando encuentros profesionales significativos basados en la escucha, la confianza y la coherencia entre talento y cultura.</p>
+        </div>
+        <div class="purpose-card fade-up">
+          <h3>Visión</h3>
+          <p>Ser referentes en selección humana y estratégica de talento, reconocidos por la calidad del vínculo, la profundidad de nuestros análisis y el impacto positivo y sostenido en la vida laboral de cada persona y empresa con la que trabajamos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALORES -->
+  <section id="que-hacemos">
+    <div class="container">
+      <p class="eyebrow fade-up">Nuestros valores</p>
+      <h2 class="section-title fade-up">Lo que sostiene cada conversación.</h2>
+      <p class="section-intro fade-up">No buscamos ocupar vacantes: buscamos conectar historias profesionales con proyectos donde puedan florecer.</p>
+
+      <div class="values-grid">
+        <div class="value fade-up">
+          <h4>Personas en el centro</h4>
+          <p>Cada proceso comienza por entender a quién acompañamos: su historia, sus motivaciones y su momento profesional.</p>
+        </div>
+        <div class="value fade-up">
+          <h4>Vínculos genuinos</h4>
+          <p>Construimos relaciones de largo plazo con candidatos y empresas, basadas en respeto y honestidad.</p>
+        </div>
+        <div class="value fade-up">
+          <h4>Transparencia</h4>
+          <p>Comunicamos con claridad cada paso del proceso, con devoluciones reales y compromisos cumplidos.</p>
+        </div>
+        <div class="value fade-up">
+          <h4>Escucha activa</h4>
+          <p>Nos tomamos el tiempo de comprender lo que no siempre se dice. Allí suelen estar las mejores decisiones.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios" class="section-soft">
+    <div class="container">
+      <p class="eyebrow fade-up">Nuestros servicios</p>
+      <h2 class="section-title fade-up">Un puente entre talento y empresas.</h2>
+      <p class="section-intro fade-up">Diseñamos cada intervención a medida, combinando rigor metodológico con una mirada profundamente humana del trabajo.</p>
+
+      <div class="services-list">
+        <article class="service-item fade-up">
+          <div class="service-num">01</div>
+          <div class="service-title">
+            <h3>Selección de Personal</h3>
+            <p>Búsquedas integrales para roles operativos, técnicos y de liderazgo.</p>
+          </div>
+          <ul class="service-features">
+            <li>Análisis del puesto y cultura</li>
+            <li>Búsqueda activa y referidos</li>
+            <li>Entrevistas por competencias</li>
+            <li>Informe final detallado</li>
+          </ul>
+        </article>
+
+        <article class="service-item fade-up">
+          <div class="service-num">02</div>
+          <div class="service-title">
+            <h3>Evaluación de Perfil</h3>
+            <p>Diagnóstico profundo de competencias y potencial profesional.</p>
+          </div>
+          <ul class="service-features">
+            <li>Evaluación psicotécnica</li>
+            <li>Pruebas situacionales</li>
+            <li>Assessment center</li>
+            <li>Devolución personalizada</li>
+          </ul>
+        </article>
+
+        <article class="service-item fade-up">
+          <div class="service-num">03</div>
+          <div class="service-title">
+            <h3>Outplacement</h3>
+            <p>Acompañamiento profesional en procesos de transición laboral.</p>
+          </div>
+          <ul class="service-features">
+            <li>Coaching individual</li>
+            <li>Estrategia de búsqueda</li>
+            <li>Marca personal y CV</li>
+            <li>Preparación de entrevistas</li>
+          </ul>
+        </article>
+
+        <article class="service-item fade-up">
+          <div class="service-num">04</div>
+          <div class="service-title">
+            <h3>Capacitación</h3>
+            <p>Programas a medida para equipos y liderazgos en evolución.</p>
+          </div>
+          <ul class="service-features">
+            <li>Talleres de comunicación</li>
+            <li>Liderazgo y gestión</li>
+            <li>Equipos de alto desempeño</li>
+            <li>Programas in-company</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUSCRIPCIÓN -->
+  <section id="oportunidades" class="subscribe">
+    <div class="container">
+      <p class="eyebrow fade-up">Oportunidades</p>
+      <h2 class="fade-up">Me interesa recibir las oportunidades laborales semanales.</h2>
+      <p class="fade-up">Una selección curada de búsquedas activas y contenido sobre desarrollo profesional, directo en tu correo. Sin spam, solo lo que importa.</p>
+
+      <form class="subscribe-form fade-up" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ Suscripto';">
+        <input type="email" placeholder="tu@email.com" required aria-label="Correo electrónico" />
+        <button type="submit">Suscribirme</button>
+      </form>
+      <p class="subscribe-note">Respetamos tu privacidad. Podés darte de baja en cualquier momento.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p class="closing">Uniendo intereses de personas con empresas.</p>
+    <p class="copy">© 2026 ConsultoraHR Demo · Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<script>
+  // Intersection observer para fade-up
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.fade-up').forEach(el => el.classList.add('in'));
+  }
+</script>
+</body>
+</html>
