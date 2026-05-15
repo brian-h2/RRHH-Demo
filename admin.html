@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin · Gestión de Vacantes — ConsultoraHR</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f6f3ee;
+      --surface: #ffffff;
+      --text: #2b2a28;
+      --text-soft: #5b5954;
+      --line: #e7e2d8;
+      --accent: #a8553f;
+      --accent-dark: #8a4332;
+      --accent-soft: #f3e8e4;
+      --danger: #c0392b;
+      --danger-soft: #fdf0ee;
+      --success: #27ae60;
+      --serif: "Cormorant Garamond", Georgia, serif;
+      --sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      --radius: 6px;
+      --shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- Header ---- */
+    .admin-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: var(--shadow);
+    }
+
+    .admin-header-inner {
+      max-width: 1140px; /* 1100px + 20px padding on each side */
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    .admin-header .logo {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .admin-header .logo span {
+      color: var(--accent);
+    }
+
+    .admin-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .back-link {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color .2s;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    @media (max-width: 480px) {
+      .admin-header-inner {
+        padding: 0 12px;
+      }
+
+      .admin-badge {
+        display: none;
+      }
+
+      .back-link {
+        font-size: 0.8rem;
+      }
+
+      .admin-header .logo {
+        font-size: 1.05rem;
+      }
+    }
+
+    /* ---- Layout ---- */
+    .admin-layout {
+      max-width: 1100px;
+      margin: 36px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    @media (max-width: 780px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+        margin: 20px auto;
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .admin-layout {
+        padding: 0 12px;
+        margin: 16px auto;
+      }
+    }
+
+    /* ---- Card ---- */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-header h2 {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+
+    .card-body {
+      padding: 24px;
+    }
+
+    @media (max-width: 480px) {
+      .card-header {
+        padding: 16px 16px 14px;
+      }
+
+      .card-body {
+        padding: 16px;
+      }
+    }
+
+    /* ---- Form ---- */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.83rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: #fff;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+      resize: vertical;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(168, 85, 63, 0.12);
+    }
+
+    textarea {
+      min-height: 90px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: var(--sans);
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:active {
+      transform: none;
+    }
+
+    /* ---- Toast ---- */
+    .toast {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .toast.success {
+      background: #edfaf3;
+      color: var(--success);
+      border: 1px solid #b7e9ce;
+      display: flex;
+    }
+
+    .toast.error {
+      background: var(--danger-soft);
+      color: var(--danger);
+      border: 1px solid #f5c6c2;
+      display: flex;
+    }
+
+    /* ---- Vacancies list ---- */
+    .list-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .list-meta h2 {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+
+    .count-badge {
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .vacancies-list {
+      padding: 16px 24px;
+    }
+
+    @media (max-width: 480px) {
+      .list-meta {
+        padding: 16px 16px 14px;
+      }
+
+      .vacancies-list {
+        padding: 8px 16px 16px;
+      }
+    }
+
+    .vacancy-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line);
+      animation: slideIn .25s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .vacancy-row:last-child {
+      border-bottom: none;
+    }
+
+    .vacancy-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .vacancy-title {
+      font-weight: 600;
+      font-size: 0.97rem;
+      color: var(--text);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .vacancy-desc {
+      font-size: 0.85rem;
+      color: var(--text-soft);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .vacancy-meta {
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-top: 5px;
+      font-weight: 500;
+    }
+
+    .btn-delete {
+      flex-shrink: 0;
+      padding: 7px 13px;
+      background: var(--danger-soft);
+      color: var(--danger);
+      border: 1px solid #f5c6c2;
+      border-radius: var(--radius);
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: var(--sans);
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-delete:hover {
+      background: #fad7d3;
+      transform: scale(1.03);
+    }
+
+    /* En móvil: la fila se apila, el botón va abajo a la derecha */
+    @media (max-width: 480px) {
+      .vacancy-row {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .vacancy-info {
+        width: 100%;
+      }
+
+      .vacancy-title {
+        white-space: normal;
+      }
+
+      .btn-delete {
+        margin-left: auto;
+        font-size: 0.8rem;
+        padding: 6px 12px;
+      }
+    }
+
+    /* ---- Empty state ---- */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-soft);
+    }
+
+    .empty-state svg {
+      opacity: 0.3;
+      margin-bottom: 16px;
+    }
+
+    .empty-state p {
+      font-size: 0.95rem;
+    }
+
+    /* ---- Icon helpers ---- */
+    .icon {
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <a href="index.html" class="logo">Consultora<span>RRHH</span></a>
+      <div class="header-right">
+        <span class="admin-badge">Panel Admin</span>
+        <a href="index.html" class="back-link">
+          ← Ver sitio
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-layout">
+
+    <!-- Columna izquierda: formulario -->
+    <div class="card">
+      <div class="card-header">
+        <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        <h2>Nueva Vacante</h2>
+      </div>
+      <div class="card-body">
+        <form id="vacancy-form" onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label for="v-title">Título del puesto *</label>
+            <input type="text" id="v-title" placeholder="Ej: Analista de RRHH Senior" required />
+          </div>
+          <div class="form-group">
+            <label for="v-desc">Descripción *</label>
+            <textarea id="v-desc" placeholder="Descripción del rol, tareas principales, área, empresa..."
+              required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="v-req">Requisitos</label>
+            <textarea id="v-req" placeholder="Experiencia requerida, educación, habilidades clave..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit" id="submit-btn">
+            <svg class="icon" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Publicar Vacante
+          </button>
+          <div class="toast" id="form-toast"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Columna derecha: listado -->
+    <div class="card">
+      <div class="list-meta">
+        <h2>Vacantes Activas</h2>
+        <span class="count-badge" id="count-badge">0 activas</span>
+      </div>
+      <div class="vacancies-list" id="vacancies-list">
+        <!-- renderizado por JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'rrhh_vacancies';
+
+    // --- Helpers ---
+    function getVacancies() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+      catch { return []; }
+    }
+    function saveVacancies(list) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    }
+    function formatDate(iso) {
+      return new Date(iso).toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    // --- Render list ---
+    function renderList() {
+      const list = getVacancies();
+      const container = document.getElementById('vacancies-list');
+      const badge = document.getElementById('count-badge');
+      badge.textContent = list.length + (list.length === 1 ? ' activa' : ' activas');
+
+      if (list.length === 0) {
+        container.innerHTML = `
+        <div class="empty-state">
+          <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-3-3v6m-7 4h14a2 2 0 002-2V7a2 2 0 00-2-2h-5l-2-2H5a2 2 0 00-2 2v13a2 2 0 002 2z"/>
+          </svg>
+          <p>No hay vacantes publicadas todavía.</p>
+        </div>`;
+        return;
+      }
+
+      // Mostrar las más recientes primero
+      const sorted = [...list].reverse();
+      container.innerHTML = sorted.map(v => `
+      <div class="vacancy-row" id="row-${v.id}">
+        <div class="vacancy-info">
+          <div class="vacancy-title">${escHtml(v.title)}</div>
+          <div class="vacancy-desc">${escHtml(v.description)}</div>
+          ${v.requirements ? `<div class="vacancy-desc" style="margin-top:2px; font-style:italic;">${escHtml(v.requirements)}</div>` : ''}
+          <div class="vacancy-meta">Publicada el ${formatDate(v.createdAt)}</div>
+        </div>
+        <button class="btn-delete" onclick="deleteVacancy('${v.id}')">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          Eliminar
+        </button>
+      </div>
+    `).join('');
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // --- Submit ---
+    function handleSubmit(e) {
+      e.preventDefault();
+      const title = document.getElementById('v-title').value.trim();
+      const description = document.getElementById('v-desc').value.trim();
+      const requirements = document.getElementById('v-req').value.trim();
+
+      if (!title || !description) return;
+
+      const vacancy = {
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+        title,
+        description,
+        requirements,
+        active: true,
+        createdAt: new Date().toISOString()
+      };
+
+      const list = getVacancies();
+      list.push(vacancy);
+      saveVacancies(list);
+      renderList();
+
+      // Reset form
+      e.target.reset();
+      showToast('¡Vacante publicada correctamente!', 'success');
+    }
+
+    // --- Delete ---
+    function deleteVacancy(id) {
+      if (!confirm('¿Eliminar esta vacante? Se quitará del sitio público.')) return;
+      const list = getVacancies().filter(v => v.id !== id);
+      saveVacancies(list);
+      // Animate out
+      const row = document.getElementById('row-' + id);
+      if (row) {
+        row.style.transition = 'opacity .2s, transform .2s';
+        row.style.opacity = '0';
+        row.style.transform = 'translateX(10px)';
+        setTimeout(renderList, 220);
+      } else {
+        renderList();
+      }
+    }
+
+    // --- Toast ---
+    function showToast(msg, type) {
+      const t = document.getElementById('form-toast');
+      t.textContent = msg;
+      t.className = 'toast ' + type;
+      setTimeout(() => { t.className = 'toast'; }, 3000);
+    }
+
+    // Init
+    renderList();
+  </script>
+</body>
+
+</html>
